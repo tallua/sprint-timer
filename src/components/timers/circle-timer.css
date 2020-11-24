@@ -1,0 +1,23 @@
+
+.circle-timer {
+  display: block;
+
+  margin: auto;
+}
+
+.circle-timer-background {
+  position: fixed;
+
+  fill: black;
+
+  width:300px;
+  height:300px;
+}
+.circle-timer-foreground {
+  position: fixed;
+
+  fill: red;
+
+  width:290px;
+  height:290px;
+}
