@@ -19,7 +19,7 @@
 }
 
 .circle-timer-svg >g:nth-child(3) >circle{
-  stroke: red;
+  stroke: #FF0000DF;
   transform-origin: center;
   transform: rotate(-90deg) scale(0.95, -0.95);
 }

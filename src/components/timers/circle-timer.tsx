@@ -86,7 +86,7 @@ export const CircleTimer: FunctionComponent<{
 
   const totalTime = props.totalTime ? props.totalTime : 3600000;
   const [timerTime, setTimerTime] = useState<number>(0);
-  const [timerTimeTemp, setTimerTimeTemp] = useState<number>(0);
+  const [timerTimeTemp, setTimerTimeTemp] = useState<number>(3600000);
 
   const sendNotification = (ms: number) => {
     if (!supportNoti || timerTime === 0) {
