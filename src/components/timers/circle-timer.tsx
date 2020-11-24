@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useStopwatch, useTimer } from '../../hooks/useTimer';
+import { Button, InputGroup, FormControl } from 'react-bootstrap';
+import { useStopwatch } from '../../hooks/useTimer';
 import './circle-timer.css'
 
 const unit = 15.9155;
@@ -17,8 +18,9 @@ function range(begin: number, end: number, interval: number) {
 }
 
 function convertRemainTime(ms: number) {
-  const sec = Math.floor((ms / 1000) % 60);
-  const min = Math.floor((ms / 60000) % 60);
+  const milisec = Math.round(ms / 1000) * 1000;
+  const sec = Math.floor((milisec / 1000) % 60);
+  const min = Math.floor((milisec / 60000) % 60);
 
   return `${min}:${sec}`
 }
@@ -40,8 +42,6 @@ const Circle: FunctionComponent<{
     </g>
   )
 }
-
-
 
 const CircleTime: FunctionComponent = (props) => {
   const getLine = (rotate: number): [number, number][] => {
@@ -80,37 +80,31 @@ const CircleTime: FunctionComponent = (props) => {
 }
 
 export const CircleTimer: FunctionComponent<{
+  totalTime?: number
 }> = (props) => {
   const [supportNoti, setSupportNoti] = useState<boolean>(false);
 
-  const totalTime = 60000;
-  const [initTime,] = useState<number>(totalTime);
-  const [currentTime, setCurrentTime] = useState<number>(0);
+  const totalTime = props.totalTime ? props.totalTime : 3600000;
+  const [timerTime, setTimerTime] = useState<number>(0);
 
   const sendNotification = (ms: number) => {
-    if (supportNoti) {
-      new Notification(`${convertRemainTime(initTime - currentTime)} Remain`);
+    if (!supportNoti || timerTime === 0) {
+      return;
     }
+    new Notification(`${convertRemainTime(remainTime)} Remain`);
   }
 
-  const [resetTimer] = useTimer((ms) => {
-    if (totalTime < ms)
-      ms = totalTime;
-    setCurrentTime(ms);
-  }, 100);
-
-  const [startStopwatch] = useStopwatch((ms) => {
+  const [remainTime, startStopwatch] = useStopwatch((ms) => {
     sendNotification(ms);
     console.log(`alarm: ${ms}`);
   }, 100);
 
   useEffect(() => {
-    resetTimer();
     startStopwatch(
-      initTime,
+      timerTime,
       range(0, 1, 1 / 12).map((v) => v * totalTime));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initTime]);
+  }, [timerTime]);
 
   useEffect(() => {
     if ('Notification' in window) {
@@ -123,22 +117,30 @@ export const CircleTimer: FunctionComponent<{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-
   return (
     <div>
-      <div>
-
-      </div>
-      <div className="circle-timer">
+      <p> Sprint Timer</p>
+      <div className="circle-timer-clock">
         <svg className="circle-timer-svg"
           viewBox={`0 0 ${4 * unit} ${4 * unit}`}>
           <Circle
             percentage={100} />
           <CircleTime />
           <Circle
-            percentage={100 - 100 * currentTime / totalTime} />
+            percentage={100 * remainTime / totalTime} />
         </svg>
-        <p> {convertRemainTime(initTime - currentTime)} Remain </p>
+      </div>
+      <p> {convertRemainTime(remainTime)} Remain </p>
+      <div className="circle-timer-footer">
+        <InputGroup>
+          <InputGroup.Prepend>
+            <InputGroup.Text id="timer-time-input"> Time </InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            placeholder="MM:SS" />
+          <Button variant="primary" onClick={() => setTimerTime(0)}> Start </Button>
+          <Button variant="primary" onClick={() => setTimerTime(0)}> Stop </Button>
+        </InputGroup>
       </div>
     </div>
   );
