@@ -3,14 +3,23 @@ import { useStopwatch, useTimer } from '../../hooks/useTimer';
 import './circle-timer.css'
 
 const Circle: FunctionComponent<{
-  className?: string
+  className?: string,
+  color: string,
+  percentage: number
 }> = (props) => {
+  const percentage = props.percentage;
   return (
-    <svg className={props.className}>
+    <svg viewBox="0 0 63.662 63.662"
+      className={props.className}>
       <circle
-        cx={'50%'}
-        cy={'50%'}
-        r={'50%'}/>
+        cx={'31.831'}
+        cy={'31.831'}
+        r={'15.9155'}
+        fill={'none'}
+        stroke={props.color}
+        strokeWidth={'31.831'}
+        strokeDasharray={`${percentage} 100`}
+        />
     </svg>
   )
 }
@@ -29,10 +38,13 @@ function range(begin: number, end: number, interval: number) {
 
 export const CircleTimer: FunctionComponent = (props) => {
 
-  const [initTime, ] = useState<number>(36000);
+  const [totalTime,] = useState<number>(3600);
+  const [currentTime, setCurrentTime] = useState<number>(0);
 
   const [resetTimer] = useTimer((ms) => {
-    console.log(ms);
+    if (totalTime < ms)
+      ms = totalTime;
+    setCurrentTime(ms);
   }, 100);
 
   const [startStopwatch] = useStopwatch((ms) => {
@@ -42,17 +54,21 @@ export const CircleTimer: FunctionComponent = (props) => {
   useEffect(() => {
     resetTimer();
     startStopwatch(
-      initTime,
-      range(0, 1, 0.1).map((v) => v * initTime));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initTime]);
+      totalTime,
+      range(0, 1, 0.1).map((v) => v * totalTime));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalTime]);
 
   return (
     <div className="circle-timer">
       <Circle
-        className="circle-timer-background"/>
+        className="circle-timer-background"
+        color='grey'
+        percentage={100} />
       <Circle
-        className="circle-timer-foreground"/>
+        className="circle-timer-foreground"
+        color='red'
+        percentage={100 - 100 * currentTime / totalTime} />
     </div>
   );
 }
