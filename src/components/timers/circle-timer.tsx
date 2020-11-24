@@ -18,11 +18,16 @@ function range(begin: number, end: number, interval: number) {
 }
 
 function convertRemainTime(ms: number) {
+  if(ms < 0)
+    ms = 0;
   const milisec = Math.round(ms / 1000) * 1000;
   const sec = Math.floor((milisec / 1000) % 60);
   const min = Math.floor((milisec / 60000) % 60);
 
-  return `${min}:${sec}`
+  const sec_str = ("0" + sec).slice(-2);
+  const min_str = ("0" + min).slice(-2);
+
+  return `${min_str}:${sec_str}`
 }
 
 const Circle: FunctionComponent<{
@@ -47,7 +52,7 @@ const CircleTime: FunctionComponent = (props) => {
   const getLine = (rotate: number): [number, number][] => {
     const center = unit * 2;
     const r1 = unit * 1.4;
-    const r2 = unit * 1.95;
+    const r2 = unit * 1.90;
     const rad = rotate / 180 * Math.PI;
 
     return [
@@ -66,12 +71,12 @@ const CircleTime: FunctionComponent = (props) => {
             return <line key={num}
               x1={line[0][0]} y1={line[0][1]}
               x2={line[1][0]} y2={line[1][1]}
-              strokeWidth={2} stroke="black" />
+              strokeWidth={2} />
           } else {
             return <line key={num}
               x1={line[0][0]} y1={line[0][1]}
               x2={line[1][0]} y2={line[1][1]}
-              strokeWidth={1} stroke="black" />
+              strokeWidth={1} />
           }
         })
       }
@@ -142,7 +147,7 @@ export const CircleTimer: FunctionComponent<{
             percentage={100 * remainTime / totalTime} />
         </svg>
       </div>
-      <p> {convertRemainTime(remainTime)} Remain </p>
+      <p> {convertRemainTime(remainTime)} </p>
       <div className="circle-timer-footer">
         <InputGroup>
           <InputGroup.Prepend>

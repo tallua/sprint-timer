@@ -6,20 +6,22 @@
   height: calc(40vmin);
 
   margin: auto;
+
+  font-weight: bold;
 }
 
 .circle-timer-svg >g:nth-child(1) >circle{
-  stroke: grey;
+  stroke: #1D4E8A;
 }
 
 .circle-timer-svg >g:nth-child(2) {
-  stroke: black;
+  stroke: #102A4A;
   stroke-width: 1;
   stroke-linecap: round;
 }
 
 .circle-timer-svg >g:nth-child(3) >circle{
-  stroke: #FF0000DF;
+  stroke: #703030CF;
   transform-origin: center;
   transform: rotate(-90deg) scale(0.95, -0.95);
 }
