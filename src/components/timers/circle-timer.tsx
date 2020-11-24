@@ -2,11 +2,23 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useStopwatch, useTimer } from '../../hooks/useTimer';
 import './circle-timer.css'
 
+const unit = 15.9155;
+
+function range(begin: number, end: number, interval: number) {
+  let result: number[] = [];
+
+  let current = begin;
+  while (current <= end) {
+    result.push(current);
+    current += interval;
+  }
+
+  return result;
+}
+
 const Circle: FunctionComponent<{
-  unit: number,
   percentage: number
 }> = (props) => {
-  const unit = props.unit;
   const percentage = props.percentage;
   return (
     <g>
@@ -22,23 +34,9 @@ const Circle: FunctionComponent<{
   )
 }
 
-function range(begin: number, end: number, interval: number) {
-  let result: number[] = [];
 
-  let current = begin;
-  while (current <= end) {
-    result.push(current);
-    current += interval;
-  }
 
-  return result;
-}
-
-const CircleTime: FunctionComponent<{
-  unit: number
-}> = (props) => {
-  const unit = props.unit;
-
+const CircleTime: FunctionComponent = (props) => {
   const getLine = (rotate: number): [number, number][] => {
     const center = unit * 2;
     const r1 = unit * 1.4;
@@ -74,7 +72,6 @@ const CircleTime: FunctionComponent<{
   )
 }
 
-
 export const CircleTimer: FunctionComponent = (props) => {
   const totalTime = 60000;
   const [remainTime, ] = useState<number>(totalTime);
@@ -98,19 +95,15 @@ export const CircleTimer: FunctionComponent = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [remainTime]);
 
-  const unit = 15.9155;
 
   return (
     <div className="circle-timer">
       <svg className="circle-timer-svg"
         viewBox={`0 0 ${4 * unit} ${4 * unit}`}>
         <Circle
-          unit={unit}
           percentage={100} />
-        <CircleTime
-          unit={unit} />
+        <CircleTime />
         <Circle
-          unit={unit}
           percentage={100 - 100 * currentTime / totalTime} />
       </svg>
     </div>
