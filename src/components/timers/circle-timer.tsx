@@ -16,6 +16,13 @@ function range(begin: number, end: number, interval: number) {
   return result;
 }
 
+function convertRemainTime(ms: number) {
+  const sec = Math.floor((ms / 1000) % 60);
+  const min = Math.floor((ms / 60000) % 60);
+
+  return `${min}:${sec}`
+}
+
 const Circle: FunctionComponent<{
   percentage: number
 }> = (props) => {
@@ -72,10 +79,19 @@ const CircleTime: FunctionComponent = (props) => {
   )
 }
 
-export const CircleTimer: FunctionComponent = (props) => {
+export const CircleTimer: FunctionComponent<{
+}> = (props) => {
+  const [supportNoti, setSupportNoti] = useState<boolean>(false);
+
   const totalTime = 60000;
-  const [remainTime, ] = useState<number>(totalTime);
+  const [initTime,] = useState<number>(totalTime);
   const [currentTime, setCurrentTime] = useState<number>(0);
+
+  const sendNotification = (ms: number) => {
+    if (supportNoti) {
+      new Notification(`${convertRemainTime(initTime - currentTime)} Remain`);
+    }
+  }
 
   const [resetTimer] = useTimer((ms) => {
     if (totalTime < ms)
@@ -84,28 +100,46 @@ export const CircleTimer: FunctionComponent = (props) => {
   }, 100);
 
   const [startStopwatch] = useStopwatch((ms) => {
+    sendNotification(ms);
     console.log(`alarm: ${ms}`);
   }, 100);
 
   useEffect(() => {
     resetTimer();
     startStopwatch(
-      remainTime,
+      initTime,
       range(0, 1, 1 / 12).map((v) => v * totalTime));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [remainTime]);
+  }, [initTime]);
+
+  useEffect(() => {
+    if ('Notification' in window) {
+      Notification.requestPermission((permission) => {
+        if (permission === 'granted') {
+          setSupportNoti(true);
+        }
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
 
   return (
-    <div className="circle-timer">
-      <svg className="circle-timer-svg"
-        viewBox={`0 0 ${4 * unit} ${4 * unit}`}>
-        <Circle
-          percentage={100} />
-        <CircleTime />
-        <Circle
-          percentage={100 - 100 * currentTime / totalTime} />
-      </svg>
+    <div>
+      <div>
+
+      </div>
+      <div className="circle-timer">
+        <svg className="circle-timer-svg"
+          viewBox={`0 0 ${4 * unit} ${4 * unit}`}>
+          <Circle
+            percentage={100} />
+          <CircleTime />
+          <Circle
+            percentage={100 - 100 * currentTime / totalTime} />
+        </svg>
+        <p> {convertRemainTime(initTime - currentTime)} Remain </p>
+      </div>
     </div>
   );
 }
