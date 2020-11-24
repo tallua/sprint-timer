@@ -86,6 +86,7 @@ export const CircleTimer: FunctionComponent<{
 
   const totalTime = props.totalTime ? props.totalTime : 3600000;
   const [timerTime, setTimerTime] = useState<number>(0);
+  const [timerTimeTemp, setTimerTimeTemp] = useState<number>(0);
 
   const sendNotification = (ms: number) => {
     if (!supportNoti || timerTime === 0) {
@@ -117,6 +118,17 @@ export const CircleTimer: FunctionComponent<{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const parseTimerTimeTempString = (value: string) => {
+    if (value.match(/^\d\d:\d\d$/g) === null)
+      return;
+
+    const min = parseInt(value.split(':')[0]);
+    const sec = parseInt(value.split(':')[1]);
+    const nextTimer = 1000 * (sec + 60 * min);
+    console.log('set timer temp : ' + nextTimer);
+    setTimerTimeTemp(nextTimer);
+  };
+
   return (
     <div>
       <p> Sprint Timer</p>
@@ -137,9 +149,11 @@ export const CircleTimer: FunctionComponent<{
             <InputGroup.Text id="timer-time-input"> Time </InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl
-            placeholder="MM:SS" />
-          <Button variant="primary" onClick={() => setTimerTime(0)}> Start </Button>
-          <Button variant="primary" onClick={() => setTimerTime(0)}> Stop </Button>
+            placeholder="MM:SS"
+            defaultValue="60:00"
+            onChange={(value) => parseTimerTimeTempString(value.target.value)} />
+          <Button variant="success" onClick={() => setTimerTime(timerTimeTemp)}> Start </Button>
+          <Button variant="danger" onClick={() => setTimerTime(0)}> Stop </Button>
         </InputGroup>
       </div>
     </div>
