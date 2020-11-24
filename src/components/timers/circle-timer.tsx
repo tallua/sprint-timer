@@ -3,24 +3,22 @@ import { useStopwatch, useTimer } from '../../hooks/useTimer';
 import './circle-timer.css'
 
 const Circle: FunctionComponent<{
-  className?: string,
-  color: string,
+  unit: number,
   percentage: number
 }> = (props) => {
+  const unit = props.unit;
   const percentage = props.percentage;
   return (
-    <svg viewBox="0 0 63.662 63.662"
-      className={props.className}>
+    <g>
       <circle
-        cx={'31.831'}
-        cy={'31.831'}
-        r={'15.9155'}
+        cx={2 * unit}
+        cy={2 * unit}
+        r={unit}
         fill={'none'}
-        stroke={props.color}
-        strokeWidth={'31.831'}
+        strokeWidth={2 * unit}
         strokeDasharray={`${percentage} 100`}
-        />
-    </svg>
+      />
+    </g>
   )
 }
 
@@ -36,9 +34,50 @@ function range(begin: number, end: number, interval: number) {
   return result;
 }
 
-export const CircleTimer: FunctionComponent = (props) => {
+const CircleTime: FunctionComponent<{
+  unit: number
+}> = (props) => {
+  const unit = props.unit;
 
-  const [totalTime,] = useState<number>(3600);
+  const getLine = (rotate: number): [number, number][] => {
+    const center = unit * 2;
+    const r1 = unit * 1.4;
+    const r2 = unit * 1.95;
+    const rad = rotate / 180 * Math.PI;
+
+    return [
+      [center + r1 * Math.cos(rad), center + r1 * Math.sin(rad)],
+      [center + r2 * Math.cos(rad), center + r2 * Math.sin(rad)]
+    ];
+  }
+
+  return (
+    <g>
+      {
+        range(0, 11, 1).map((num) => {
+          const line = getLine(num * 30);
+
+          if (num % 3 === 0) {
+            return <line key={num}
+              x1={line[0][0]} y1={line[0][1]}
+              x2={line[1][0]} y2={line[1][1]}
+              strokeWidth={2} stroke="black" />
+          } else {
+            return <line key={num}
+              x1={line[0][0]} y1={line[0][1]}
+              x2={line[1][0]} y2={line[1][1]}
+              strokeWidth={1} stroke="black" />
+          }
+        })
+      }
+    </g>
+  )
+}
+
+
+export const CircleTimer: FunctionComponent = (props) => {
+  const totalTime = 60000;
+  const [remainTime, ] = useState<number>(totalTime);
   const [currentTime, setCurrentTime] = useState<number>(0);
 
   const [resetTimer] = useTimer((ms) => {
@@ -54,21 +93,26 @@ export const CircleTimer: FunctionComponent = (props) => {
   useEffect(() => {
     resetTimer();
     startStopwatch(
-      totalTime,
-      range(0, 1, 0.1).map((v) => v * totalTime));
+      remainTime,
+      range(0, 1, 1 / 12).map((v) => v * totalTime));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalTime]);
+  }, [remainTime]);
+
+  const unit = 15.9155;
 
   return (
     <div className="circle-timer">
-      <Circle
-        className="circle-timer-background"
-        color='grey'
-        percentage={100} />
-      <Circle
-        className="circle-timer-foreground"
-        color='red'
-        percentage={100 - 100 * currentTime / totalTime} />
+      <svg className="circle-timer-svg"
+        viewBox={`0 0 ${4 * unit} ${4 * unit}`}>
+        <Circle
+          unit={unit}
+          percentage={100} />
+        <CircleTime
+          unit={unit} />
+        <Circle
+          unit={unit}
+          percentage={100 - 100 * currentTime / totalTime} />
+      </svg>
     </div>
   );
 }

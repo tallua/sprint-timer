@@ -8,21 +8,18 @@
   margin: auto;
 }
 
-.circle-timer-background {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-
-  width:100%;
-  height:100%;
+.circle-timer-svg >g:nth-child(1) >circle{
+  stroke: grey;
 }
-.circle-timer-foreground {
-  position: absolute;
-  transform: rotate(-90deg);
 
-  left: 4px;
-  top: 4px;
+.circle-timer-svg >g:nth-child(2) {
+  stroke: black;
+  stroke-width: 1;
+  stroke-linecap: round;
+}
 
-  width:calc(100% - 8px);
-  height:calc(100% - 8px);
+.circle-timer-svg >g:nth-child(3) >circle{
+  stroke: red;
+  transform-origin: center;
+  transform: rotate(-90deg) scale(0.95, -0.95);
 }
