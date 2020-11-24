@@ -23,5 +23,5 @@
 .circle-timer-svg >g:nth-child(3) >circle{
   stroke: #703030CF;
   transform-origin: center;
-  transform: rotate(-90deg) scale(0.95, -0.95);
+  transform: rotate(-90deg) scale(0.75, -0.75);
 }
