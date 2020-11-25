@@ -48,25 +48,25 @@ const Circle: FunctionComponent<{
     </g>
   )
 }
+const getLine = (center: number, r1: number, r2: number, rotate: number): [number, number][] => {
+  const rad = rotate / 180 * Math.PI;
+
+  return [
+    [center + r1 * Math.cos(rad), center + r1 * Math.sin(rad)],
+    [center + r2 * Math.cos(rad), center + r2 * Math.sin(rad)]
+  ];
+}
 
 const CircleTime: FunctionComponent = (props) => {
-  const getLine = (rotate: number): [number, number][] => {
-    const center = unit * 2;
-    const r1 = unit * 1.4;
-    const r2 = unit * 1.90;
-    const rad = rotate / 180 * Math.PI;
-
-    return [
-      [center + r1 * Math.cos(rad), center + r1 * Math.sin(rad)],
-      [center + r2 * Math.cos(rad), center + r2 * Math.sin(rad)]
-    ];
-  }
+  const center = unit * 2;
+  const r1 = unit * 1.4;
+  const r2 = unit * 1.8;
 
   return (
     <g>
       {
         range(0, 11, 1).map((num) => {
-          const line = getLine(num * 30);
+          const line = getLine(center, r1, r2, num * 30);
 
           if (num % 3 === 0) {
             return <line key={num}
@@ -85,6 +85,34 @@ const CircleTime: FunctionComponent = (props) => {
   )
 }
 
+const CircleHand: FunctionComponent<{
+  percentage: number
+}> = (props) => {
+  const center = unit * 2;
+  const r1 = unit * 0.2;
+  const r2 = unit * 2;
+
+  const line1 = getLine(center, r1, r2, 3.6 * props.percentage);
+  const line2 = getLine(center, r1, r2, 0);
+
+  return (
+    <g>
+      <circle
+        cx={2 * unit}
+        cy={2 * unit}
+        r={r1} />
+      <line
+        x1={line1[0][0]} y1={line1[0][1]}
+        x2={line1[1][0]} y2={line1[1][1]}
+        strokeWidth={1} />
+      <line
+        x1={line2[0][0]} y1={line2[0][1]}
+        x2={line2[1][0]} y2={line2[1][1]}
+        strokeWidth={1} />
+    </g>
+  )
+}
+
 const CircleClockImage: FunctionComponent<{
   percentage: number;
 }> = (props) => {
@@ -95,6 +123,8 @@ const CircleClockImage: FunctionComponent<{
         percentage={100} />
       <CircleTime />
       <Circle
+        percentage={100 * props.percentage} />
+      <CircleHand
         percentage={100 * props.percentage} />
     </svg>
   );
@@ -115,8 +145,8 @@ export const CircleTimer: FunctionComponent<{
 
     console.log(`alarm: ${ms}`);
     sendNotification(`${convertRemainTime(ms)} Remain`);
-    
-    if(ms === 0)
+
+    if (ms === 0)
       setTimerTime(0);
   }, 100);
 
