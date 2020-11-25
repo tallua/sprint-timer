@@ -133,7 +133,7 @@ const CircleClockImage: FunctionComponent<{
 export const CircleTimer: FunctionComponent<{
   totalTime?: number
 }> = (props) => {
-  const totalTime = props.totalTime ? props.totalTime : 3600000;
+  const totalTime = props.totalTime ? props.totalTime : 60000;
   const alarmTimes = range(0, 1, 1 / 12).map((v) => v * totalTime);
 
   const { sendNotification } = useContext(NotificationContext);
