@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/sprint-timer/static/css/main.b224a330.chunk.css",
-    "main.js": "/sprint-timer/static/js/main.e305c3b8.chunk.js",
-    "main.js.map": "/sprint-timer/static/js/main.e305c3b8.chunk.js.map",
-    "runtime-main.js": "/sprint-timer/static/js/runtime-main.da0c2bb2.js",
-    "runtime-main.js.map": "/sprint-timer/static/js/runtime-main.da0c2bb2.js.map",
+    "main.css": "/sprint-timer/static/css/main.50f7fa17.chunk.css",
+    "main.js": "/sprint-timer/static/js/main.19ea3765.chunk.js",
+    "main.js.map": "/sprint-timer/static/js/main.19ea3765.chunk.js.map",
+    "runtime-main.js": "/sprint-timer/static/js/runtime-main.09c03490.js",
+    "runtime-main.js.map": "/sprint-timer/static/js/runtime-main.09c03490.js.map",
     "static/css/2.1a02f21c.chunk.css": "/sprint-timer/static/css/2.1a02f21c.chunk.css",
-    "static/js/2.3a8d8930.chunk.js": "/sprint-timer/static/js/2.3a8d8930.chunk.js",
-    "static/js/2.3a8d8930.chunk.js.map": "/sprint-timer/static/js/2.3a8d8930.chunk.js.map",
-    "static/js/3.7b63dc0f.chunk.js": "/sprint-timer/static/js/3.7b63dc0f.chunk.js",
-    "static/js/3.7b63dc0f.chunk.js.map": "/sprint-timer/static/js/3.7b63dc0f.chunk.js.map",
+    "static/js/2.7dbb3ed4.chunk.js": "/sprint-timer/static/js/2.7dbb3ed4.chunk.js",
+    "static/js/2.7dbb3ed4.chunk.js.map": "/sprint-timer/static/js/2.7dbb3ed4.chunk.js.map",
+    "static/js/3.6b574895.chunk.js": "/sprint-timer/static/js/3.6b574895.chunk.js",
+    "static/js/3.6b574895.chunk.js.map": "/sprint-timer/static/js/3.6b574895.chunk.js.map",
     "index.html": "/sprint-timer/index.html",
     "static/css/2.1a02f21c.chunk.css.map": "/sprint-timer/static/css/2.1a02f21c.chunk.css.map",
-    "static/css/main.b224a330.chunk.css.map": "/sprint-timer/static/css/main.b224a330.chunk.css.map",
-    "static/js/2.3a8d8930.chunk.js.LICENSE.txt": "/sprint-timer/static/js/2.3a8d8930.chunk.js.LICENSE.txt"
+    "static/css/main.50f7fa17.chunk.css.map": "/sprint-timer/static/css/main.50f7fa17.chunk.css.map",
+    "static/js/2.7dbb3ed4.chunk.js.LICENSE.txt": "/sprint-timer/static/js/2.7dbb3ed4.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.da0c2bb2.js",
+    "static/js/runtime-main.09c03490.js",
     "static/css/2.1a02f21c.chunk.css",
-    "static/js/2.3a8d8930.chunk.js",
-    "static/css/main.b224a330.chunk.css",
-    "static/js/main.e305c3b8.chunk.js"
+    "static/js/2.7dbb3ed4.chunk.js",
+    "static/css/main.50f7fa17.chunk.css",
+    "static/js/main.19ea3765.chunk.js"
   ]
 }
