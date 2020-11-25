@@ -1,5 +1,6 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import { Button, InputGroup, FormControl } from 'react-bootstrap';
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
+import { NotificationContext } from '../notification-context';
+import { TimeSelector } from '../time-selector';
 import { useStopwatch } from '../../hooks/useTimer';
 import './circle-timer.css'
 
@@ -18,7 +19,7 @@ function range(begin: number, end: number, interval: number) {
 }
 
 function convertRemainTime(ms: number) {
-  if(ms < 0)
+  if (ms < 0)
     ms = 0;
   const milisec = Math.round(ms / 1000) * 1000;
   const sec = Math.floor((milisec / 1000) % 60);
@@ -84,82 +85,49 @@ const CircleTime: FunctionComponent = (props) => {
   )
 }
 
+const CircleClockImage: FunctionComponent<{
+  percentage: number;
+}> = (props) => {
+  return (
+    <svg className="circle-timer-svg"
+      viewBox={`0 0 ${4 * unit} ${4 * unit}`}>
+      <Circle
+        percentage={100} />
+      <CircleTime />
+      <Circle
+        percentage={100 * props.percentage} />
+    </svg>
+  );
+}
+
 export const CircleTimer: FunctionComponent<{
   totalTime?: number
 }> = (props) => {
-  const [supportNoti, setSupportNoti] = useState<boolean>(false);
+  const totalTime = props.totalTime ? props.totalTime : 36000;
+  const alarmTimes = range(0, 1, 1 / 12).map((v) => v * totalTime);
 
-  const totalTime = props.totalTime ? props.totalTime : 3600000;
+  const { sendNotification } = useContext(NotificationContext);
   const [timerTime, setTimerTime] = useState<number>(0);
-  const [timerTimeTemp, setTimerTimeTemp] = useState<number>(3600000);
-
-  const sendNotification = (ms: number) => {
-    if (!supportNoti || timerTime === 0) {
-      return;
-    }
-    new Notification(`${convertRemainTime(remainTime)} Remain`);
-  }
-
   const [remainTime, startStopwatch] = useStopwatch((ms) => {
-    sendNotification(ms);
+    sendNotification(`${convertRemainTime(remainTime)} Remain`);
     console.log(`alarm: ${ms}`);
   }, 100);
 
   useEffect(() => {
-    startStopwatch(
-      timerTime,
-      range(0, 1, 1 / 12).map((v) => v * totalTime));
+    startStopwatch(timerTime, alarmTimes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timerTime]);
 
-  useEffect(() => {
-    if ('Notification' in window) {
-      Notification.requestPermission((permission) => {
-        if (permission === 'granted') {
-          setSupportNoti(true);
-        }
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const parseTimerTimeTempString = (value: string) => {
-    if (value.match(/^\d\d:\d\d$/g) === null)
-      return;
-
-    const min = parseInt(value.split(':')[0]);
-    const sec = parseInt(value.split(':')[1]);
-    const nextTimer = 1000 * (sec + 60 * min);
-    console.log('set timer temp : ' + nextTimer);
-    setTimerTimeTemp(nextTimer);
-  };
 
   return (
     <div>
       <p> Sprint Timer</p>
       <div className="circle-timer-clock">
-        <svg className="circle-timer-svg"
-          viewBox={`0 0 ${4 * unit} ${4 * unit}`}>
-          <Circle
-            percentage={100} />
-          <CircleTime />
-          <Circle
-            percentage={100 * remainTime / totalTime} />
-        </svg>
+        <CircleClockImage percentage={remainTime / totalTime} />
       </div>
       <p> {convertRemainTime(remainTime)} </p>
       <div className="circle-timer-footer">
-        <InputGroup>
-          <InputGroup.Prepend>
-            <InputGroup.Text id="timer-time-input"> Time </InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl
-            placeholder="MM:SS"
-            defaultValue="60:00"
-            onChange={(value) => parseTimerTimeTempString(value.target.value)} />
-          <Button variant="success" onClick={() => setTimerTime(timerTimeTemp)}> Start </Button>
-          <Button variant="danger" onClick={() => setTimerTime(0)}> Stop </Button>
-        </InputGroup>
+        <TimeSelector onTimeSelected={(ms) => setTimerTime(ms)} />
       </div>
     </div>
   );

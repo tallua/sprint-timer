@@ -5,23 +5,6 @@ interface TimerSettings {
   checkpoints: [number, number][];
 }
 
-export function useTimer(callback: (ms: number) => void, tick: number = 100) {
-  const [resetCount, setResetCount] = useState<number>(0);
-
-  useEffect(() => {
-    let tickCount = 0;
-    const timer = setInterval(() => {
-      callback(tickCount * tick);
-      tickCount++;
-    }, tick);
-
-    return () => { clearInterval(timer) };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resetCount]);
-
-  return [() => setResetCount(resetCount + 1)];
-}
-
 export function useStopwatch(callback: (checkpoint: number) => void, tick: number = 100) {
   const [settings, setSettings] = useState<TimerSettings>({
     endTime: 0,
@@ -39,7 +22,10 @@ export function useStopwatch(callback: (checkpoint: number) => void, tick: numbe
       setCurrentTime(nextTime);
     }, tick);
 
-    return () => clearInterval(timer);
+    return () => { 
+      console.log('relase interval');  
+      clearInterval(timer); 
+    }
   }, [settings, tick]);
 
   useEffect(() => {
