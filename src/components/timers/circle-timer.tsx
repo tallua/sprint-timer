@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import { NotificationContext } from '../notification-context';
 import { TimeSelector } from '../time-selector';
 import { useStopwatch } from '../../hooks/useTimer';
@@ -133,13 +133,13 @@ const CircleClockImage: FunctionComponent<{
 export const CircleTimer: FunctionComponent<{
   totalTime?: number
 }> = (props) => {
-  const totalTime = props.totalTime ? props.totalTime : 60000;
+  const totalTime = props.totalTime ? props.totalTime : 3600000;
   const alarmTimes = range(0, 1, 1 / 12).map((v) => v * totalTime);
 
   const { sendNotification } = useContext(NotificationContext);
-  const [timerTime, setTimerTime] = useState<number>(0);
+  const [alarmEnabled, setAlarmEnabled] = useState<boolean>(false);
   const [remainTime, startStopwatch] = useStopwatch((ms) => {
-    if (timerTime === 0) {
+    if (!alarmEnabled) {
       return;
     }
 
@@ -147,13 +147,8 @@ export const CircleTimer: FunctionComponent<{
     sendNotification(`${convertRemainTime(ms)} Remain`);
 
     if (ms === 0)
-      setTimerTime(0);
+      setAlarmEnabled(false);
   }, 100);
-
-  useEffect(() => {
-    startStopwatch(timerTime, alarmTimes);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timerTime]);
 
   return (
     <div>
@@ -163,7 +158,10 @@ export const CircleTimer: FunctionComponent<{
       </div>
       <p> {convertRemainTime(remainTime)} </p>
       <div className="circle-timer-footer">
-        <TimeSelector onTimeSelected={(ms) => setTimerTime(ms)} />
+        <TimeSelector onTimeSelected={(ms) => {
+          setAlarmEnabled(ms !== 0);
+          startStopwatch(ms, alarmTimes);
+        }} />
       </div>
     </div>
   );
