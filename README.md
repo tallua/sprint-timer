@@ -1,17 +1,18 @@
 # Sprint Timer
+Simple Online 1 hour timer
 
 
 ## Motivation
-Inspired by [time timer](https://www.timetimer.com/), 
+Inspired by [Time Timer](https://www.timetimer.com/), 
+
 
 ## Site
-Published on [github page](https://tallua.github.io/sprint-timer/)
+Published on [Github Page](https://tallua.github.io/sprint-timer/)
+
 
 ## License
 TBD
 
 ## TODO & Some Stuff
  - Need to change logo
- - This doesn't need branch managing... right?
- - Maybe support electron build with always-on-top property
  - Add License
