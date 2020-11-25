@@ -5,7 +5,7 @@
 Inspired by [time timer](https://www.timetimer.com/), 
 
 ## Site
-Published on [github page]()
+Published on [github page](https://tallua.github.io/sprint-timer/)
 
 ## License
 TBD
