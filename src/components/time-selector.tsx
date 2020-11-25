@@ -32,7 +32,7 @@ export const TimeSelector: FunctionComponent<{
       </Button>
       <Button
         variant="danger"
-        onClick={() => props.onTimeSelected && props.onTimeSelected(timerTimeTemp)}>
+        onClick={() => props.onTimeSelected && props.onTimeSelected(0)}>
         Stop
       </Button>
     </InputGroup>

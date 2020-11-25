@@ -37,7 +37,7 @@ export function useStopwatch(callback: (checkpoint: number) => void, tick: numbe
       return;
     }
 
-    callback(settings.checkpoints[nextCheckpointIndex][0]);
+    callback(settings.endTime - currentTime);
     setNextCheckpointIndex(nextCheckpointIndex + 1);
   }, [settings, currentTime, callback, nextCheckpointIndex]);
 

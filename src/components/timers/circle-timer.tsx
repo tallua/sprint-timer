@@ -109,15 +109,21 @@ export const CircleTimer: FunctionComponent<{
   const { sendNotification } = useContext(NotificationContext);
   const [timerTime, setTimerTime] = useState<number>(0);
   const [remainTime, startStopwatch] = useStopwatch((ms) => {
-    sendNotification(`${convertRemainTime(remainTime)} Remain`);
+    if (timerTime === 0) {
+      return;
+    }
+
     console.log(`alarm: ${ms}`);
+    sendNotification(`${convertRemainTime(ms)} Remain`);
+    
+    if(ms === 0)
+      setTimerTime(0);
   }, 100);
 
   useEffect(() => {
     startStopwatch(timerTime, alarmTimes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timerTime]);
-
 
   return (
     <div>
