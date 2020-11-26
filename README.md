@@ -11,8 +11,4 @@ Published on [Github Page](https://tallua.github.io/sprint-timer/)
 
 
 ## License
-TBD
-
-## TODO & Some Stuff
- - Need to change logo
- - Add License
+[MIT License](LICENSE)
