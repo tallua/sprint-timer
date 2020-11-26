@@ -17,16 +17,16 @@ function capTo(value: number, cap: number): number {
 }
 
 const timeMatcher1 = createMatcher(/^\d\d:\d\d$/g, (value) => {
-  const min = capTo(parseInt(value.split(':')[0]), 60);
-  const sec = capTo(parseInt(value.split(':')[1]), 60);
+  const min = capTo(parseInt(value.split(':')[0]), 59);
+  const sec = capTo(parseInt(value.split(':')[1]), 59);
   const nextTimer = 1000 * (sec + 60 * min);
 
   return nextTimer;
 });
 
 const timeMatcher2 = createMatcher(/^\d\d.\d\d$/g, (value) => {
-  const min = capTo(parseInt(value.split('.')[0]), 60);
-  const sec = capTo(parseInt(value.split('.')[1]), 60);
+  const min = capTo(parseInt(value.split('.')[0]), 59);
+  const sec = capTo(parseInt(value.split('.')[1]), 59);
   const nextTimer = 1000 * (sec + 60 * min);
 
   return nextTimer;
@@ -34,7 +34,7 @@ const timeMatcher2 = createMatcher(/^\d\d.\d\d$/g, (value) => {
 
 const timeMatcher3 = createMatcher(/^\d{1,2}$/g, (value) => {
   const min = capTo(parseInt(value), 60);
-  const nextTimer = 1000 * 60 * min;
+  const nextTimer = min === 60 ? 3599999 : 1000 * 60 * min;
 
   return nextTimer;
 });
@@ -47,9 +47,12 @@ const matchers = [
 
 
 export const TimeSelector: FunctionComponent<{
+  initTime?: number,
   onTimeSelected?: (ms: number) => void
 }> = (props) => {
-  const [timeSelect, setTimeSelect] = useState<number>(3600000);
+  const maxTime = 3599999;
+  const initTime = props.initTime ? props.initTime : maxTime;
+  const [timeSelect, setTimeSelect] = useState<number>(initTime);
 
   const onMatch = (ms: number) => {
     console.log(`time matched to : ${ms}`);
@@ -63,6 +66,15 @@ export const TimeSelector: FunctionComponent<{
     }
   }
 
+  const onTimeSelect = (ms: number) => {
+    if(!props.onTimeSelected) {
+      return;
+    }
+
+    ms = maxTime < ms ? maxTime : ms;
+    props.onTimeSelected(ms)
+  }
+
   return (
     <InputGroup>
       <InputGroup.Prepend>
@@ -74,12 +86,12 @@ export const TimeSelector: FunctionComponent<{
         onChange={(value) => onTextChange(value.target.value)} />
       <Button
         variant="success"
-        onClick={() => props.onTimeSelected && props.onTimeSelected(timeSelect)}>
+        onClick={() => onTimeSelect(timeSelect)}>
         Start
       </Button>
       <Button
         variant="danger"
-        onClick={() => props.onTimeSelected && props.onTimeSelected(0)}>
+        onClick={() => onTimeSelect(0)}>
         Stop
       </Button>
     </InputGroup>

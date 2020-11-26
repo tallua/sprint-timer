@@ -23,10 +23,10 @@ function convertRemainTime(ms: number) {
     ms = 0;
   const milisec = Math.round(ms / 1000) * 1000;
   const sec = Math.floor((milisec / 1000) % 60);
-  const min = Math.floor((milisec / 60000) % 60);
+  const min = Math.floor((milisec / 60000));
 
   const sec_str = ("0" + sec).slice(-2);
-  const min_str = ("0" + min).slice(-2);
+  const min_str = min === 60 ? min : ("0" + min).slice(-2);
 
   return `${min_str}:${sec_str}`
 }
@@ -158,10 +158,13 @@ export const CircleTimer: FunctionComponent<{
       </div>
       <p> {convertRemainTime(remainTime)} </p>
       <div className="circle-timer-footer">
-        <TimeSelector onTimeSelected={(ms) => {
-          setAlarmEnabled(ms !== 0);
-          startStopwatch(ms, alarmTimes);
-        }} />
+        <TimeSelector
+          initTime={totalTime}
+          onTimeSelected={(ms) => {
+            setAlarmEnabled(ms !== 0);
+            console.log(`start stopwatch: ${ms}`);
+            startStopwatch(ms, alarmTimes);
+          }} />
       </div>
     </div>
   );
