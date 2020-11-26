@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/sprint-timer/static/css/main.50f7fa17.chunk.css",
-    "main.js": "/sprint-timer/static/js/main.509e0069.chunk.js",
-    "main.js.map": "/sprint-timer/static/js/main.509e0069.chunk.js.map",
+    "main.js": "/sprint-timer/static/js/main.a68e282a.chunk.js",
+    "main.js.map": "/sprint-timer/static/js/main.a68e282a.chunk.js.map",
     "runtime-main.js": "/sprint-timer/static/js/runtime-main.09c03490.js",
     "runtime-main.js.map": "/sprint-timer/static/js/runtime-main.09c03490.js.map",
     "static/css/2.1a02f21c.chunk.css": "/sprint-timer/static/css/2.1a02f21c.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.1a02f21c.chunk.css",
     "static/js/2.7dbb3ed4.chunk.js",
     "static/css/main.50f7fa17.chunk.css",
-    "static/js/main.509e0069.chunk.js"
+    "static/js/main.a68e282a.chunk.js"
   ]
 }
